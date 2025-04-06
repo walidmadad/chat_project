@@ -73,7 +73,9 @@ void *handle_client(void *socket_desc)
         {
             if (clients[i].socket != sock) // Ne pas envoyer à l'expéditeur
             {
-                send(clients[i].socket, message, bytes_received, 0);
+                char full_message[2048];
+                snprintf(full_message, sizeof(full_message), "{\"from\": \"%s\", \"text\": \"%s\"}", client_name, message);
+                send(clients[i].socket, full_message, strlen(full_message), 0);
             }
         }
         pthread_mutex_unlock(&client_mutex);
