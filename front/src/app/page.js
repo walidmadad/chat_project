@@ -89,7 +89,7 @@ export default function Home() {
           <div key={i} className="mb-2">{msg}</div>
         ))}
       </div>
-      <div className="flex bg-neutral-800 w-full h-20 rounded-full mt-4 px-8">
+      <div className="flex bg-neutral-800 w-full h-20 rounded-tl-full rounded-bl-full mt-4 px-8">
         <input
           type="text"
           value={message}
