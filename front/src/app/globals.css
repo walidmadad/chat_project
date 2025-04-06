@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+.scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  @layer utilities {
+    /* Styles pour la scrollbar */
+    .scrollbar::-webkit-scrollbar {
+      width: 6px; /* Largeur de la scrollbar */
+      height: 6px;
+    }
+  
+    .scrollbar::-webkit-scrollbar-track {
+      background: #4b4b64; /* Couleur de fond */
+      border-radius: 4px;
+    }
+  
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #4d4d4d; /* Couleur de la barre */
+      border-radius: 4px;
+    }
+  
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #4d4d4d; /* Couleur au survol */
+    }
+  }
+
+/* Custom classes */
+.scrollbar::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #4d4d4d;
+  border-radius: 8px;
+}
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
