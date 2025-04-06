@@ -7,7 +7,8 @@ export default function Home() {
   const [message, setMessage] = useState('');
   const [chat, setChat] = useState([]);
   const ws = useRef(null);
-  const username = "mehdi"; // ou tu peux demander via prompt()
+  const [username, setUsername] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
     ws.current = new WebSocket("ws://localhost:3001");
@@ -17,8 +18,17 @@ export default function Home() {
       ws.current.send(username); // envoyer le nom au début
     };
 
+    // Reception du message
     ws.current.onmessage = (event) => {
-      setChat(prev => [...prev, event.data]);
+      try {
+        const data = JSON.parse(event.data);// s'assurer que le message est bien en format JSON
+        console.log("Message reçu:", data);
+        if (data.from && data.text) {
+          setChat((prev) => [...prev, `${data.from}: ${data.text}`]);
+        }
+      } catch (e) {
+        console.error("Erreur de parsing JSON:", e);
+      }
     };
 
     ws.current.onclose = () => {
@@ -32,15 +42,43 @@ export default function Home() {
 
   const sendMessage = () => {
     if (ws.current && message.trim() !== '') {
-      ws.current.send(message);
-      setChat(prev => [...prev, `Moi: ${message}`]);
+      ws.current.send(message); // Envoie simplement le message
+      setChat(prev => [...prev, `Moi: ${message}`]); // Affiche le message côté client
       setMessage('');
     }
   };
 
   return (
+    <>
+    {/* Form to set username */}
+    {!isConnected ? (
+    <div className="flex flex-col justify-center items-center h-screen bg-neutral-900">
+      <input
+        type="text"
+        value={username}
+        placeholder="Entrez votre nom"
+        className="mb-4 p-2 rounded text-neutral-200"
+        onChange={(e) => setUsername(e.currentTarget.value)}
+      />
+      <button
+        className="bg-blue-500 text-white p-2 rounded"
+        onClick={() => {
+          ws.current.send(username);
+          setIsConnected(true);
+        }}
+      >
+        Se connecter
+      </button>
+    </div>) :
     <div className="flex flex-col justify-end h-screen bg-neutral-900 p-4">
-      <div className="bg-neutral-800 w-full h-full rounded-4xl p-8 overflow-y-auto text-white">
+      <div className="flex items-center justify-between mx-10 text-white font-bold text-2xl mb-4 py-2">
+      <div className="flex items-center">
+        <img src="./favicon.ico" alt="Logo" className="w-12 h-12 mr-2" />
+        <p>MessengerApp</p>
+      </div>
+        <p className="flex justify-center text-center">Bonjour {username}</p>
+      </div>
+      <div className="bg-neutral-800 w-full h-full rounded-bl-4xl rounded-tl-4xl px-8 py-4 overflow-y-auto text-white overflow-hidden scrollbar">
         {chat.map((msg, i) => (
           <div key={i} className="mb-2">{msg}</div>
         ))}
@@ -62,7 +100,7 @@ export default function Home() {
           />
         )}
       </div>
-    </div>
+    </div>}
+    </>
   );
 }
-
