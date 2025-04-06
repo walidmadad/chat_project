@@ -52,16 +52,20 @@ export default function Home() {
     <>
     {/* Form to set username */}
     {!isConnected ? (
-    <div className="flex flex-col justify-center items-center h-screen bg-neutral-900">
+    <div className="flex flex-col justify-center items-center h-screen bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 px-4">
+    <div className="bg-neutral-800 p-6 rounded-2xl shadow-2xl w-full max-w-sm">
+      <h1 className="text-white text-2xl font-semibold mb-6 text-center">
+        Connexion
+      </h1>
       <input
         type="text"
         value={username}
         placeholder="Entrez votre nom"
-        className="mb-4 p-2 rounded text-neutral-200"
+        className="w-full mb-4 p-3 rounded-xl bg-neutral-700 text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
         onChange={(e) => setUsername(e.currentTarget.value)}
       />
       <button
-        className="bg-blue-500 text-white p-2 rounded"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-all duration-200 shadow-md"
         onClick={() => {
           ws.current.send(username);
           setIsConnected(true);
@@ -69,7 +73,9 @@ export default function Home() {
       >
         Se connecter
       </button>
-    </div>) :
+    </div>
+  </div>
+  ) :
     <div className="flex flex-col justify-end h-screen bg-neutral-900 p-4">
       <div className="flex items-center justify-between mx-10 text-white font-bold text-2xl mb-4 py-2">
       <div className="flex items-center">
